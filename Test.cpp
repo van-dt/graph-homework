@@ -48,5 +48,7 @@ int main()
     puffer_code("tree.txt");
     output_file_ColoredGrarp("dothi.txt");
 
+    printf("hello");
+
     return 0;
 }
