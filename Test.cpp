@@ -47,7 +47,5 @@ int main()
 	//DFS(g, "HN");
     puffer_code("tree.txt");
     //output_file_ColoredGrarp("dothi.txt");
-
-
     return 0;
 }
