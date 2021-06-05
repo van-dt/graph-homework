@@ -14,7 +14,7 @@ int getAdjacentVertices_str (Graph graph, char* v, char output[10][10]);
 list<string> getAllVertexes(Graph graph);
 
 // duyet do thi theo chieu rong, dinh bat dau l� start
-void BFS(Graph graph, char* start);// duyet theo chieu rong
+void BFS(Graph graph, string start);// duyet theo chieu rong
 void DFS(Graph graph, char* start); // duyet theo chieu sau
 //puffer_code
 void puffer_code(char *filename);

@@ -46,9 +46,8 @@ int main()
     //printf("\nDFS tu HN\n");
 	//DFS(g, "HN");
     puffer_code("tree.txt");
-    output_file_ColoredGrarp("dothi.txt");
+    //output_file_ColoredGrarp("dothi.txt");
 
-    printf("hello");
 
     return 0;
 }

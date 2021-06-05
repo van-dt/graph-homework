@@ -121,6 +121,7 @@ list<string> getAllVertexes(Graph graph)
 }
 
 // hàm băm lụm trên gg
+/*
 struct pair_hash
 {
     template <class T1, class T2>
@@ -162,6 +163,30 @@ void BFS(Graph g,char*start){
 			}
 		}
 	}
+}
+*/ //cách hơi dài edit lại
+
+void BFS (Graph g,string start){
+	queue<string> Q;
+	unordered_map<string,int> dist;
+	list<string> vertex =getAllVertexes(g);
+	for(auto u:vertex) dist[u]=max;
+	dist[start] = 0;
+	Q.push(start);
+	while (!Q.empty())
+	{
+		string u=Q.front();
+		Q.pop();
+		cout <<u <<"\t";
+		char output[10][10];
+		int n=getAdjacentVertices_str(g,strdup(u.c_str()),output);
+		for(int i=0;i<n;i++){
+			if(dist[output[i]] == max){
+				Q.push(output[i]);
+				dist[output[i]] = dist[u] +1;
+			}
+		}
+	}	
 }
 
 void DFS(Graph graph, char* start)
@@ -217,15 +242,15 @@ void DFS(Graph graph, char* start)
 void puffer_code(char *filename){
 	int i,j,n,e;
     FILE *f1=fopen(filename,"r");
-    fscanf(f1,"%d",&n);
-	e=n-1;
+    fscanf(f1,"%d",&e);
+	n=e+1;
    // int a[n][2];
-    int **a=(int**)malloc((e+1)*sizeof(int*));
+    int **a=(int**)malloc((n)*sizeof(int*));
     for(i=0;i<=e;i++){
         a[i]=(int*)malloc(2*sizeof(int));
     }
     int *deg=(int*)malloc((n+1)*sizeof(int));
-    for(i=0;i<=n;i++) deg[i]=0;
+    for(i=0;i<n;i++) deg[i]=0;
     for(i=0;i<e;i++){
         fscanf(f1,"%d\t%d\n",&a[i][0],&a[i][1]);
         for(j=1;j<=n;j++) if(j==a[i][0] || j==a[i][1]) deg[j]++;
@@ -233,35 +258,40 @@ void puffer_code(char *filename){
     fclose(f1);
   
     printf("ma prurfer code cua cay la:");
-    
-    for(i=1;i<n;i++){
-        if(deg[i]==1){
-            for(j=0;j<e;j++)
+     for(i=1;i<n;i++){ 
+		 if(deg[i]==1){
+			 for(j=0;j<e;j++)
             {
-                if(a[j][0]==i && deg[a[j][1]]>=1)
+                if(a[j][0]==i )
                 {
                     printf("%d ",a[j][1]);
+					int tmp=a[j][1];
+					a[j][1]=-1;
+					a[j][0]=-1;
                     deg[i]--;
-                    deg[a[j][1]]--;
-                    if(deg[a[j][1]]==1 && a[j][1]<i && a[j][1]!=0){
-                        i=a[j][1];
-                        j=0;
+                    deg[tmp]--;
+                    if(deg[tmp]==1 && tmp<i && tmp!=0){
+                        i=tmp;
+                        break;
                     }
                 }
-                if(a[j][1]==i && deg[a[j][0]]>=1)
+                if(a[j][1]==i)
                 {
                     printf("%d ",a[j][0]);
+					int tmp=a[j][0];
+					a[j][0]=-1;
+					a[j][1]=-1;
                     deg[i]--;
-                    deg[a[j][0]]--;
-                    if(deg[a[j][0]]==1 && a[j][0]<i && a[j][0]!=0){
-                        i=a[j][0];
-                        j=0;
+                    deg[tmp]--;
+                    if(deg[tmp]==1 && tmp<i && tmp!=0){
+                        i=tmp;
+                        break;
                     }
                 }
             }
-
+		 }
+	   
         }
-    }
 }
 
 // to mau do thi tu file txt :
