@@ -9,7 +9,7 @@
 
 using namespace std;
 typedef pair<int, string> ipair; 
-
+typedef pair<string , string> spair; 
 Graph createGraph()
 {
 	Graph newGraph = make_jrb();
@@ -281,9 +281,16 @@ void Dijkstra(Graph g , string start){
 	//priority_queue<map_s , vector(map_s), greater<map_s>> Q;
 	// tao min_heap 
 	priority_queue <ipair, vector<ipair>,greater<ipair>> pq;
+
+	//tao prev
+	unordered_map<string,string> prev; 
+
 	unordered_map<string,int> dist;
 	list<string> vertex =getAllVertexes(g);
-	for(auto u:vertex) dist[u]=max;
+	for(auto u:vertex) { 
+		dist[u]=max;
+		prev[u] = ""; 
+	}
 	dist[start] = 0;
 	for (auto u:vertex) { 
 		pq.push(make_pair(dist[u], u)); 
@@ -291,21 +298,39 @@ void Dijkstra(Graph g , string start){
 	while (!pq.empty() ) { 
 		string u = pq.top().second; 
 		pq.pop(); 
-		// lay cac dinh noi voi u ; 
+		// lay cac dinh v noi voi u ; 
 		char output[10][10];
 		int n=getAdjacentVertices_str(g,strdup(u.c_str()),output);
 		for (int i=0; i<n; i++) { 
+			// neu co dg di ngan hon thi update
 			int new_weight = dist[u]+getEdgeWeight_str(g,strdup(u.c_str()),output[i]); 
 			if (dist[output[i]]>new_weight) { 
 				dist[output[i]] = new_weight ; 
-				pq.push(make_pair(dist[output[i]], output[i])); 
+				// update lai hang doi uu tien 
+				pq.push(make_pair(dist[output[i]], output[i]));
+				
+				// update lai prev 
+				prev[output[i]] = u; 
 			}
 		}
 
 	}
 	cout<<endl; 
-	for(auto x:vertex) { 
-		cout<<x<<" "<<dist[x]<<endl;  
+	// for(auto x:prev) {
+	// 	cout<<x.first<<" "<<x.second<<endl; 
+	// }
+	cout<<endl ; 
+	// in duong di 
+	for(auto u:vertex) { 
+		cout<<u<<" "<<dist[u]<<endl;  
+		string s = u; 
+		while (s!="") { 
+			if (prev[s] != "")
+				cout<<s<<"<-";
+			else cout<< s; 
+			s=prev[s]; 
+		}
+		cout<<endl ; 
 	}
 }
 
