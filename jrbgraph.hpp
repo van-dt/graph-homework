@@ -7,15 +7,22 @@ typedef JRB Graph;
 Graph createGraph();
 void addEdge_int(Graph graph, int v1, int v2, int weight);
 void addEdge_str(Graph graph, char* v1, char* v2, int weight);
+void addEdge_directed_str(Graph graph, char* v1, char* v2, int weight);
 int getAdjacentVertices_int (Graph graph, int v, int* output);
 int getAdjacentVertices_str (Graph graph, char* v, char output[10][10]);
 
 //tra ve cac dinh hien co tren do thi
 list<string> getAllVertexes(Graph graph);
 
+//lay trong so cua canh 
+int getEdgeWeight_str(Graph graph, char* v1, char* v2); 
+
 // duyet do thi theo chieu rong, dinh bat dau l� start
 void BFS(Graph graph, string start);// duyet theo chieu rong
 void DFS(Graph graph, char* start); // duyet theo chieu sau
+
+void Dijkstra(Graph graph, string start); 
+
 //puffer_code
 void puffer_code(char *filename);
 //color_graph

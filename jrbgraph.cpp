@@ -6,7 +6,9 @@
 #include <queue>
 #include <bits/stdc++.h>
 #define max 999999
+
 using namespace std;
+typedef pair<int, string> ipair; 
 
 Graph createGraph()
 {
@@ -85,6 +87,32 @@ void addEdge_str(Graph graph, char* v1, char* v2, int weight)
 	}
 }
 
+void addEdge_directed_str(Graph graph, char* v1, char* v2, int weight)
+{
+	// them canh v1 v2
+	// check xem da co dinh tren cay chua
+	JRB bn = jrb_find_str(graph, v1);
+	if(bn==NULL) // neu chua co thi them vao
+	{		
+		JRB tree = make_jrb(); 
+		jrb_insert_str(tree, strdup(v2), new_jval_i(weight));
+		jrb_insert_str(graph, strdup(v1), new_jval_v(tree));
+	}
+	else // dinh v1 da co tren cay
+	{
+		//node = jrb_find_int(g, v1);
+		// them canh v1 v2
+		JRB tree = (JRB) jval_v(bn->val);
+		jrb_insert_str(tree, strdup(v2), new_jval_i(weight));			
+	}
+	// them nut ao vao neu v2 la leaf
+	bn = jrb_find_str(graph, v2);
+	if (bn == NULL) {
+		JRB tree = make_jrb();
+		jrb_insert_str(graph, strdup(v2), new_jval_v(tree));
+	}
+}
+
 int getAdjacentVertices_str (Graph graph, char* v, char output[10][10])
 {
 	JRB node = jrb_find_str(graph, v);
@@ -120,6 +148,19 @@ list<string> getAllVertexes(Graph graph)
 	return vertexes;
 }
 
+// lay trong so cua canh 
+int getEdgeWeight_str(Graph graph, char* v1, char* v2)
+{
+	JRB node = jrb_find_str(graph, v1);
+	JRB tree = (JRB) jval_v(node->val);
+	int total = 0;   
+	jrb_traverse(node, tree)
+	{
+		if(strcmp(jval_s(node->key),v2)==0)
+			return jval_i(node->val);
+	}   
+	return -1; 
+}
 // hàm băm lụm trên gg
 /*
 struct pair_hash
@@ -232,6 +273,39 @@ void DFS(Graph graph, char* start)
 			S.pop();
 			printf("Ket thuc tham %5s tai %d\n", v, timecount);
 		}
+	}
+}
+
+// dijsktra using priority queue and pair 
+void Dijkstra(Graph g , string start){ 
+	//priority_queue<map_s , vector(map_s), greater<map_s>> Q;
+	// tao min_heap 
+	priority_queue <ipair, vector<ipair>,greater<ipair>> pq;
+	unordered_map<string,int> dist;
+	list<string> vertex =getAllVertexes(g);
+	for(auto u:vertex) dist[u]=max;
+	dist[start] = 0;
+	for (auto u:vertex) { 
+		pq.push(make_pair(dist[u], u)); 
+	}
+	while (!pq.empty() ) { 
+		string u = pq.top().second; 
+		pq.pop(); 
+		// lay cac dinh noi voi u ; 
+		char output[10][10];
+		int n=getAdjacentVertices_str(g,strdup(u.c_str()),output);
+		for (int i=0; i<n; i++) { 
+			int new_weight = dist[u]+getEdgeWeight_str(g,strdup(u.c_str()),output[i]); 
+			if (dist[output[i]]>new_weight) { 
+				dist[output[i]] = new_weight ; 
+				pq.push(make_pair(dist[output[i]], output[i])); 
+			}
+		}
+
+	}
+	cout<<endl; 
+	for(auto x:vertex) { 
+		cout<<x<<" "<<dist[x]<<endl;  
 	}
 }
 
